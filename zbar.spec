@@ -1,4 +1,4 @@
-%define	hgtag	38e78368283d
+%define	hgtag	38e78368283d5afe34bbc0cedb36d4540cda3a30
 
 %define	major	0
 %define	libname	%mklibname %{name} %{major}
@@ -9,17 +9,18 @@
 Name:		zbar
 Summary:	Bar Code Reader software suite for reading bar codes from various sources
 Version:	0.10
-Release:	2.20121014.4
+Release:	3
 License:	GPLv2+
 Group:		Graphics
 URL:		http://sourceforge.net/projects/%{name}/
-Source0:	http://zbar.hg.sourceforge.net/hgweb/zbar/zbar/archive/%{hgtag}.tar.bz2
+Source0:	https://sourceforge.net/code-snapshots/hg/z/zb/zbar/code/zbar-code-%{hgtag}.zip
 Patch0:		zbar-automake-1.2.patch
+Patch1:		zbar-qt5.patch
 BuildRequires:	git
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(pygtk-2.0)
 BuildRequires:	gettext-devel
-BuildRequires:	pkgconfig(QtCore) pkgconfig(QtGui)
+BuildRequires:	pkgconfig(Qt5Core) pkgconfig(Qt5Gui) pkgconfig(Qt5Widgets)
 BuildRequires:	xmlto
 BuildRequires:	pkgconfig(GraphicsMagick++)
 Requires:	graphicsmagick
@@ -77,12 +78,17 @@ Python bindings for the ZBar Bar Code Reader
 #--------------------------------------------------------------------
 
 %prep
-%setup -qn %{name}-%{hgtag}
-%patch0 -p1 -b .aytomake~
+%autosetup -p1 -n %{name}-code-%{hgtag}
 autoreconf -fi
 
 %build
-%configure2_5x	--without-java
+# We use --with-graphicsmagick because it's less work
+# than porting to current ImageMagick...
+# --without-python because python 2.x needs to die
+%configure	\
+	--with-graphicsmagick \
+	--without-java \
+	--without-python
 %make
 
 %install
@@ -103,10 +109,6 @@ autoreconf -fi
 
 %files -n %{libqt}
 %{_libdir}/libzbarqt.so.%{major}*
-
-%files -n python-%{name}
-%{py_platsitedir}/zbar.so
-%{py_platsitedir}/zbarpygtk.so
 
 %files -n %{devname}
 %{_includedir}/zbar.h

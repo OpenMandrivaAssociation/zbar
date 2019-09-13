@@ -1,0 +1,84 @@
+diff -up zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/configure.ac.2~ zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/configure.ac
+--- zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/configure.ac.2~	2019-09-13 20:22:03.282072531 +0200
++++ zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/configure.ac	2019-09-13 20:22:03.332220812 +0200
+@@ -474,10 +474,10 @@ AC_ARG_WITH([qt],
+ AC_ARG_VAR([MOC], [full path to Qt moc program])
+ 
+ AS_IF([test "x$with_qt" != "xno"],
+-  [PKG_CHECK_MODULES([QT], [QtCore >= 4 QtGui >= 4])
+-   MOC=`$PKG_CONFIG QtGui --variable=moc_location`
++  [PKG_CHECK_MODULES([QT], [Qt5Core >= 5 Qt5Gui >= 5 Qt5Widgets >= 5 Qt5X11Extras >= 5])
++   MOC=`which moc`
+    AC_MSG_NOTICE([using moc from $MOC])
+-   QT_VERSION=`$PKG_CONFIG QtGui --modversion`
++   QT_VERSION=`$PKG_CONFIG Qt5Gui --modversion`
+    AC_MSG_NOTICE([using Qt version $QT_VERSION])])
+ 
+ AM_CONDITIONAL([HAVE_QT], [test "x$with_qt" = "xyes"])
+diff -up zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/include/zbar/QZBarImage.h.2~ zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/include/zbar/QZBarImage.h
+--- zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/include/zbar/QZBarImage.h.2~	2019-09-13 20:01:56.000000000 +0200
++++ zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/include/zbar/QZBarImage.h	2019-09-13 20:17:48.343949749 +0200
+@@ -54,7 +54,7 @@ public:
+         unsigned height = qimg.height();
+         set_size(width, height);
+         set_format(zbar_fourcc('B','G','R','4'));
+-        unsigned long datalen = qimg.numBytes();
++        unsigned long datalen = qimg.sizeInBytes();
+         set_data(qimg.bits(), datalen);
+ 
+         if((width * 4 != bpl) ||
+diff -up zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/qt/QZBar.cpp.2~ zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/qt/QZBar.cpp
+--- zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/qt/QZBar.cpp.2~	2019-09-13 20:02:10.000000000 +0200
++++ zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/qt/QZBar.cpp	2019-09-13 20:22:59.460481019 +0200
+@@ -23,7 +23,8 @@
+ 
+ #include <qevent.h>
+ #include <qurl.h>
+-#include <qx11info_x11.h>
++#include <QX11Info>
++#include <QMimeData>
+ #include <zbar/QZBar.h>
+ #include "QZBarThread.h"
+ 
+@@ -49,7 +50,7 @@ QZBar::QZBar (QWidget *parent)
+ 
+     thread = new QZBarThread;
+     if(testAttribute(Qt::WA_WState_Created)) {
+-        thread->window.attach(x11Info().display(), winId());
++        thread->window.attach(QX11Info::display(), winId());
+         _attached = 1;
+     }
+     connect(thread, SIGNAL(videoOpened(bool)),
+@@ -204,7 +205,7 @@ void QZBar::changeEvent(QEvent *event)
+     try {
+         QMutexLocker locker(&thread->mutex);
+         if(event->type() == QEvent::ParentChange)
+-            thread->window.attach(x11Info().display(), winId());
++            thread->window.attach(QX11Info::display(), winId());
+     }
+     catch(Exception) { /* ignore (FIXME do something w/error) */ }
+ }
+@@ -215,7 +216,7 @@ void QZBar::attach ()
+         return;
+ 
+     try {
+-        thread->window.attach(x11Info().display(), winId());
++        thread->window.attach(QX11Info::display(), winId());
+         _attached = 1;
+ 
+         _videoEnabled = !_videoDevice.isEmpty();
+diff -up zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/zbar-qt.pc.in.2~ zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/zbar-qt.pc.in
+--- zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/zbar-qt.pc.in.2~	2019-09-13 20:02:12.000000000 +0200
++++ zbar-code-38e78368283d5afe34bbc0cedb36d4540cda3a30/zbar-qt.pc.in	2019-09-13 20:17:48.343949749 +0200
+@@ -4,9 +4,9 @@ libdir=@libdir@
+ includedir=@includedir@
+ 
+ Name: zbar-qt
+-Description: bar code scanning and decoding Qt4 widget
++Description: bar code scanning and decoding Qt5 widget
+ URL: http://zbar.sourceforge.net
+ Version: @VERSION@
+-Requires: zbar, QtCore >= 4, QtGui >= 4
++Requires: zbar, Qt5Core >= 5, Qt5Gui >= 5
+ Libs: -L${libdir} -lzbarqt
+ Cflags: -I${includedir}
