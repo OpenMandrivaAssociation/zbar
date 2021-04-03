@@ -19,7 +19,7 @@ Patch1:		zbar-qt5.patch
 BuildRequires:	git
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	gettext-devel
-BuildRequires:	pkgconfig(Qt5Core) pkgconfig(Qt5Gui) pkgconfig(Qt5Widgets)
+BuildRequires:	pkgconfig(Qt5Core) pkgconfig(Qt5Gui) pkgconfig(Qt5Widgets) pkgconfig(Qt5X11Extras)
 BuildRequires:	xmlto
 BuildRequires:	pkgconfig(GraphicsMagick++)
 Requires:	graphicsmagick
