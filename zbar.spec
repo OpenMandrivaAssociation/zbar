@@ -9,7 +9,7 @@
 Name:		zbar
 Summary:	Bar Code Reader software suite for reading bar codes from various sources
 Version:	0.10
-Release:	3
+Release:	4
 License:	GPLv2+
 Group:		Graphics
 URL:		http://sourceforge.net/projects/%{name}/
@@ -18,7 +18,6 @@ Patch0:		zbar-automake-1.2.patch
 Patch1:		zbar-qt5.patch
 BuildRequires:	git
 BuildRequires:	pkgconfig(gtk+-2.0)
-BuildRequires:	pkgconfig(pygtk-2.0)
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(Qt5Core) pkgconfig(Qt5Gui) pkgconfig(Qt5Widgets)
 BuildRequires:	xmlto
