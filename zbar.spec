@@ -19,10 +19,11 @@ Source0:	https://github.com/mchehab/zbar/archive/refs/tags/%{version}.tar.gz
 BuildRequires:	git
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(dbus-1)
+BuildRequires:	pkgconfig(gobject-introspection-1.0)
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(Qt5Core) pkgconfig(Qt5Gui) pkgconfig(Qt5Widgets) pkgconfig(Qt5X11Extras)
 BuildRequires:	xmlto
-BuildRequires:	pkgconfig(GraphicsMagick++)
+BuildRequires:	pkgconfig(ImageMagick++)
 Requires:	graphicsmagick
 
 %description
@@ -96,14 +97,13 @@ Python bindings for the ZBar Bar Code Reader
 autoreconf -fi
 
 %build
-# We use --with-graphicsmagick because it's less work
-# than porting to current ImageMagick...
 # --without-python because python 2.x needs to die
+# and 3.x isn't supported yet
 %configure	\
-	--with-graphicsmagick \
+	--with-imagemagick \
 	--without-java \
 	--without-python
-%make
+%make_build
 
 %install
 %makeinstall_std 
