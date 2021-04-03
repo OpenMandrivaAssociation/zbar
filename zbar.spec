@@ -23,7 +23,7 @@ BuildRequires:	pkgconfig(gobject-introspection-1.0)
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(Qt5Core) pkgconfig(Qt5Gui) pkgconfig(Qt5Widgets) pkgconfig(Qt5X11Extras)
 BuildRequires:	xmlto
-BuildRequires:	pkgconfig(ImageMagick++)
+BuildRequires:	pkgconfig(MagickWand)
 Requires:	graphicsmagick
 
 %description
