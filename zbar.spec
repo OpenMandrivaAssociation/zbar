@@ -8,16 +8,17 @@
 
 Name:		zbar
 Summary:	Bar Code Reader software suite for reading bar codes from various sources
-Version:	0.10
-Release:	4
+Version:	0.23.92
+Release:	1
 License:	GPLv2+
 Group:		Graphics
-URL:		http://sourceforge.net/projects/%{name}/
-Source0:	https://sourceforge.net/code-snapshots/hg/z/zb/zbar/code/zbar-code-%{hgtag}.zip
-Patch0:		zbar-automake-1.2.patch
-Patch1:		zbar-qt5.patch
+# See also https://linuxtv.org/downloads/zbar
+URL:		https://github.com/mchehab/zbar
+Source0:	https://github.com/mchehab/zbar/archive/refs/tags/%{version}.tar.gz
+#Patch1:		zbar-qt5.patch
 BuildRequires:	git
 BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(Qt5Core) pkgconfig(Qt5Gui) pkgconfig(Qt5Widgets) pkgconfig(Qt5X11Extras)
 BuildRequires:	xmlto
@@ -33,6 +34,20 @@ are basic applications for decoding captured bar code images and using
 a video device (eg, webcam) as a bar code scanner.  For application
 developers, language bindings are included for C, C++, Python and Perl
 as well as GUI widgets for Qt, GTK and PyGTK.
+
+%package qt
+Summary:	Qt frontend for the ZBar barcode reader
+Group:		Graphics
+
+%description qt
+Qt frontend for the ZBar barcode reader
+
+%package gtk
+Summary:	Gtk frontend for the ZBar barcode reader
+Group:		Graphics
+
+%description gtk
+Gtk frontend for the ZBar barcode reader
 
 %package -n	%{libname}
 Summary:	ZBAR Libraries
@@ -77,7 +92,7 @@ Python bindings for the ZBar Bar Code Reader
 #--------------------------------------------------------------------
 
 %prep
-%autosetup -p1 -n %{name}-code-%{hgtag}
+%autosetup -p1
 autoreconf -fi
 
 %build
@@ -92,19 +107,29 @@ autoreconf -fi
 
 %install
 %makeinstall_std 
+%find_lang %{name}
 
-%files
+%files -f %{name}.lang
 %{_bindir}/zbarcam
 %{_bindir}/zbarimg
+%{_sysconfdir}/dbus-1/system.d/org.linuxtv.Zbar.conf
 %doc %{_datadir}/doc/%{name}/*
 %{_mandir}/man1/zbarcam.1*
 %{_mandir}/man1/zbarimg.1*
+
+%files qt
+%{_bindir}/zbarcam-qt
+
+%files gtk
+%{_bindir}/zbarcam-gtk
 
 %files -n %{libname}
 %{_libdir}/libzbar.so.%{major}*
 
 %files -n %{libgtk}
 %{_libdir}/libzbargtk.so.%{major}*
+%{_libdir}/girepository-1.0/ZBar-1.0.typelib
+%{_datadir}/gir-1.0/ZBar-1.0.gir
 
 %files -n %{libqt}
 %{_libdir}/libzbarqt.so.%{major}*
