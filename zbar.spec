@@ -9,7 +9,7 @@
 Name:		zbar
 Summary:	Bar Code Reader software suite for reading bar codes from various sources
 Version:	0.23.92
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Graphics
 # See also https://linuxtv.org/downloads/zbar
