@@ -8,8 +8,8 @@
 
 Name:		zbar
 Summary:	Bar Code Reader software suite for reading bar codes from various sources
-Version:	0.23.92
-Release:	3
+Version:	0.23.93
+Release:	1
 License:	GPLv2+
 Group:		Graphics
 # See also https://linuxtv.org/downloads/zbar
@@ -97,12 +97,9 @@ Python bindings for the ZBar Bar Code Reader
 autoreconf -fi
 
 %build
-# --without-python because python 2.x needs to die
-# and 3.x isn't supported yet
 %configure	\
 	--with-imagemagick \
-	--without-java \
-	--without-python
+	--without-java
 %make_build
 
 %install
