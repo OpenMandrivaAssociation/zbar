@@ -17,7 +17,7 @@ URL:		https://github.com/mchehab/zbar
 Source0:	https://github.com/mchehab/zbar/archive/refs/tags/%{version}.tar.gz
 #Patch1:		zbar-qt5.patch
 BuildRequires:	git
-BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	pkgconfig(gobject-introspection-1.0)
 BuildRequires:	gettext-devel
