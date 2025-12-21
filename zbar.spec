@@ -16,6 +16,11 @@ Group:		Graphics
 URL:		https://github.com/mchehab/zbar
 Source0:	https://github.com/mchehab/zbar/archive/refs/tags/%{version}.tar.gz
 #Patch1:		zbar-qt5.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	git
 BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(dbus-1)
