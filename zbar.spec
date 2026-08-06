@@ -29,6 +29,7 @@ BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(Qt5Core) pkgconfig(Qt5Gui) pkgconfig(Qt5Widgets) pkgconfig(Qt5X11Extras)
 BuildRequires:	xmlto
 BuildRequires:	pkgconfig(MagickWand)
+BuildRequires:	pkgconfig(libv4l2)
 Requires:	graphicsmagick
 
 %description
@@ -103,6 +104,7 @@ autoreconf -fi
 
 %build
 %configure	\
+	--with-v4l \
 	--with-imagemagick \
 	--without-java
 %make_build
